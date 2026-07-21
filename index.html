@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>נאום ציונות במבצע יונתן — נגן עם תמלול לחיץ</title>
+  <style>
+    :root {
+      --bg: #eef3f9;
+      --card: #ffffff;
+      --text: #182033;
+      --muted: #667085;
+      --line: #e4e9f2;
+      --accent: #2563eb;
+      --accent-soft: #e7efff;
+      --active: #fff3c4;
+      --active-border: #f59e0b;
+      --shadow: 0 18px 45px rgba(25, 35, 55, .10);
+      --radius: 18px;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+      background: radial-gradient(circle at top, #f7faff 0%, var(--bg) 45%, #e9eff7 100%);
+      color: var(--text);
+    }
+    .page { max-width: 1280px; margin: 0 auto; padding: 20px 24px 34px; }
+
+    .amit-logo {
+      display: block;
+      width: min(231px, 50vw);
+      height: auto;
+      margin: 0 auto 12px;
+      object-fit: contain;
+    }
+    header { text-align: center; margin-bottom: 22px; }
+    h1 { margin: 0 0 6px; font-size: clamp(30px, 4vw, 48px); line-height: 1.05; letter-spacing: -0.04em; }
+    .subtitle { margin: 0; color: var(--muted); font-size: 15px; }
+    .layout { display: grid; grid-template-columns: minmax(480px, 1.25fr) minmax(340px, .85fr); gap: 24px; align-items: start; direction: ltr; }
+    .video-card, .transcript-card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; direction: rtl; }
+    .video-wrap { background: #111827; position: relative; }
+    video { display: block; width: 100%; max-height: 72vh; background: #111827; }
+    .controls { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; padding: 14px; border-top: 1px solid var(--line); }
+    button, a.btn {
+      appearance: none; border: 1px solid #d6deea; background: #fff; color: var(--text); border-radius: 999px;
+      padding: 9px 15px; font-size: 14px; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;
+    }
+    button:hover, a.btn:hover { border-color: var(--accent); color: var(--accent); background: #f8fbff; }
+    .source-note { padding: 12px 16px 16px; border-top: 1px solid var(--line); color: var(--muted); font-size: 13px; text-align: center; }
+    .transcript-card { height: min(76vh, 720px); display: flex; flex-direction: column; }
+    .search-box { padding: 16px 16px 10px; border-bottom: 1px solid var(--line); background: rgba(255,255,255,.94); position: sticky; top: 0; z-index: 5; }
+    #search {
+      width: 100%; border: 1px solid #d9e1ee; border-radius: 999px; padding: 12px 18px; font-size: 15px; outline: none;
+    }
+    #search:focus { border-color: var(--accent); box-shadow: 0 0 0 4px rgba(37,99,235,.10); }
+    .status { display: flex; justify-content: space-between; gap: 10px; color: var(--muted); font-size: 13px; margin-top: 10px; }
+    .transcript-list { overflow: auto; padding: 10px; scroll-behavior: smooth; }
+    .cue {
+      width: 100%; text-align: right; display: grid; grid-template-columns: 58px 1fr; gap: 12px; border: 1px solid transparent;
+      border-radius: 14px; padding: 10px 12px; margin: 5px 0; cursor: pointer; background: transparent; color: inherit;
+    }
+    .cue:hover { background: #f7f9fd; border-color: #edf1f7; }
+    .cue.active { background: var(--active); border-color: var(--active-border); box-shadow: 0 7px 20px rgba(245,158,11,.12); }
+    .time { color: var(--muted); font-variant-numeric: tabular-nums; direction: ltr; text-align: left; font-size: 13px; padding-top: 2px; }
+    .text { font-size: 15px; line-height: 1.55; }
+    mark { background: #fde68a; color: inherit; padding: 0 2px; border-radius: 4px; }
+    .hidden { display:none !important; }
+    .error { margin: 14px; padding: 12px 14px; border: 1px solid #fecaca; background: #fff1f2; border-radius: 12px; color: #991b1b; font-size: 14px; }
+    @media (max-width: 900px) {
+      .page { padding: 14px; }
+      .amit-logo { width: min(182px, 55vw); margin-bottom: 8px; }
+      .layout { grid-template-columns: 1fr; direction: rtl; }
+      .transcript-card { height: 52vh; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header>
+      <img class="amit-logo" src="amit-logo.png" alt="לוגו רשת אמית" />
+      <h1>נאום ציונות במבצע יונתן</h1>
+      <p class="subtitle">לחיצה על שורה בתמלול תקפיץ את הסרטון לנקודה המתאימה. בזמן הניגון, השורה הפעילה מודגשת.</p>
+    </header>
+
+    <section class="layout">
+      <article class="video-card">
+        <div class="video-wrap">
+          <video id="video" controls preload="metadata" playsinline crossorigin="anonymous">
+            <source src="https://res.cloudinary.com/nrjhmk3e/video/upload/v1784625482/%D7%A0%D7%90%D7%95%D7%9D_%D7%A6%D7%99%D7%95%D7%A0%D7%95%D7%AA_%D7%91%D7%9E%D7%91%D7%A6%D7%A2_%D7%99%D7%95%D7%A0%D7%AA%D7%9F_eox2xw.mp4" type="video/mp4" />
+            הדפדפן שלך לא תומך בנגן וידאו HTML5.
+          </video>
+        </div>
+        <div class="controls">
+          <button type="button" id="back10">↩ 10 שניות</button>
+          <button type="button" id="forward10">10 שניות ↪</button>
+          <button type="button" id="restart">מהתחלה</button>
+        </div>
+        <div id="videoError" class="error hidden">הסרטון לא נטען. בדוק שה־Delivery URL ב־Cloudinary פתוח לצפייה ציבורית ושמדובר בכתובת שמתחילה ב־https://res.cloudinary.com/</div>
+      </article>
+
+      <aside class="transcript-card">
+        <div class="search-box">
+          <input id="search" type="search" placeholder="חיפוש בתמלול..." autocomplete="off" />
+          <div class="status">
+            <span id="count">טוען תמלול...</span>
+            <span id="currentTime">00:00</span>
+          </div>
+        </div>
+        <div id="transcript" class="transcript-list" aria-label="תמלול לחיץ"></div>
+      </aside>
+    </section>
+  </main>
+
+  <script>
+    const TRANSCRIPT = [{"start": 0.0, "end": 16.0, "text": "אני יודע שאתם לא אוהבים לשמוע ציונות, אבל בכל זאת כמה מילים \"נקיות\"."}, {"start": 16.0, "end": 21.0, "text": "אנחנו יוצאים למבצע במרחק של אלפי קילומטרים מהארץ כדי להציל ישראלים."}, {"start": 21.0, "end": 26.0, "text": "וזאת רק בגלל שהם ישראלים ויהודים."}, {"start": 27.0, "end": 31.0, "text": "מפני שאם אנחנו לא נעשה את זה, אף אחד אחר לא יעשה את זה בשבילנו."}, {"start": 32.0, "end": 42.0, "text": "זה מבצע ארוך ומסובך, ואני רוצה להדגיש שהצלחת המבצע או כישלונו תלויים רק בנו."}, {"start": 43.0, "end": 48.0, "text": "אני מאמין שנצליח, ושנחזיר את האנשים האלה בשלום הביתה."}, {"start": 50.0, "end": 51.0, "text": "שיהיה בהצלחה."}];
+    const video = document.getElementById('video');
+    const transcriptEl = document.getElementById('transcript');
+    const searchEl = document.getElementById('search');
+    const countEl = document.getElementById('count');
+    const currentTimeEl = document.getElementById('currentTime');
+    const videoError = document.getElementById('videoError');
+    let cueElements = [];
+    let activeIndex = -1;
+
+    function formatTime(seconds) {
+      seconds = Math.max(0, Math.floor(Number(seconds) || 0));
+      const h = Math.floor(seconds / 3600);
+      const m = Math.floor((seconds % 3600) / 60);
+      const s = seconds % 60;
+      if (h > 0) return `${h}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+      return `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+    }
+
+    function escapeHtml(str) {
+      return String(str).replace(/[&<>'"]/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[ch]));
+    }
+
+    function highlightText(text, query) {
+      const safe = escapeHtml(text);
+      if (!query) return safe;
+      const escapedQuery = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      try {
+        return safe.replace(new RegExp(escapedQuery, 'gi'), match => `<mark>${match}</mark>`);
+      } catch (e) {
+        return safe;
+      }
+    }
+
+    function renderTranscript() {
+      const query = searchEl.value.trim();
+      const frag = document.createDocumentFragment();
+      transcriptEl.innerHTML = '';
+      cueElements = [];
+      let visibleCount = 0;
+
+      TRANSCRIPT.forEach((cue, index) => {
+        const matches = !query || cue.text.includes(query);
+        if (!matches) return;
+        visibleCount++;
+        const row = document.createElement('button');
+        row.type = 'button';
+        row.className = 'cue';
+        row.dataset.index = String(index);
+        row.dataset.start = String(cue.start);
+        row.innerHTML = `<span class="time">${formatTime(cue.start)}</span><span class="text">${highlightText(cue.text, query)}</span>`;
+        row.addEventListener('click', () => {
+          video.currentTime = cue.start;
+          video.play().catch(() => {});
+          setActive(index, true);
+        });
+        frag.appendChild(row);
+        cueElements[index] = row;
+      });
+
+      transcriptEl.appendChild(frag);
+      countEl.textContent = query ? `${visibleCount} תוצאות מתוך ${TRANSCRIPT.length} שורות` : `${TRANSCRIPT.length} שורות תמלול`;
+      updateActive();
+    }
+
+    function findActiveIndex(time) {
+      let lo = 0, hi = TRANSCRIPT.length - 1, ans = -1;
+      while (lo <= hi) {
+        const mid = Math.floor((lo + hi) / 2);
+        if (TRANSCRIPT[mid].start <= time) { ans = mid; lo = mid + 1; }
+        else { hi = mid - 1; }
+      }
+      if (ans >= 0 && time <= TRANSCRIPT[ans].end + 1.2) return ans;
+      return ans;
+    }
+
+    function setActive(index, scroll) {
+      if (activeIndex === index && !scroll) return;
+      const prev = cueElements[activeIndex];
+      if (prev) prev.classList.remove('active');
+      activeIndex = index;
+      const current = cueElements[activeIndex];
+      if (current) {
+        current.classList.add('active');
+        if (scroll) current.scrollIntoView({ block: 'center', behavior: 'smooth' });
+      }
+    }
+
+    function updateActive() {
+      currentTimeEl.textContent = formatTime(video.currentTime || 0);
+      const idx = findActiveIndex(video.currentTime || 0);
+      setActive(idx, false);
+    }
+
+    video.addEventListener('timeupdate', updateActive);
+    video.addEventListener('loadedmetadata', updateActive);
+    video.addEventListener('error', () => videoError.classList.remove('hidden'));
+    searchEl.addEventListener('input', renderTranscript);
+    document.getElementById('back10').addEventListener('click', () => { video.currentTime = Math.max(0, video.currentTime - 10); });
+    document.getElementById('forward10').addEventListener('click', () => { video.currentTime = Math.min(video.duration || Infinity, video.currentTime + 10); });
+    document.getElementById('restart').addEventListener('click', () => { video.currentTime = 0; video.play().catch(() => {}); });
+
+    renderTranscript();
+  </script>
+</body>
+</html>
